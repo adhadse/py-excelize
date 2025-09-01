@@ -2,32 +2,24 @@ import setuptools
 from setuptools import Extension
 import os
 
-version = os.environ.get('RELEASE_VERSION', None)
-if version is None:
-    raise ValueError(f"version {version} is None. ENV var RELEASE_VERSION: {os.environ.get('RELEASE_VERSION')}")
+version = os.environ.get('RELEASE_VERSION', '0.0.0.dev0')
 version = version.lstrip('v')
-print(f"verion: {version}")
+print(f"version: {version}")
 
 setuptools.setup(
-    name="py_excel_form_extractor",
+    name="py_excelize",
     version=version,
-    url="https://github.com/adhadse/excelFormExtractor",
+    url="https://github.com/adhadse/pyexcelize",
     author="Anurag Dhadse",
     description="Extract excel form content into structured data.",
     long_description_content_type="text/markdown",
-    packages=setuptools.find_packages(include=["py_excel_form_extractor"]),
+    packages=setuptools.find_packages(include=["py_excelize"]),
     license="MIT",
     platforms="Linux",
-    keywords=["go", "golang", "python", "excel", "xlsx", "form", "extractor"],
-    ext_modules=[
-        Extension(
-            "py_excel_form_extractor._extractor",
-            sources=["py_excel_form_extractor/extractor.c"],
-            include_dirs=["py_excel_form_extractor"],
-        )
-    ],
-    py_modules = ["py_excel_form_extractor.extractor", "py_excel_form_extractor.utils"],
-    package_data={"py_excel_form_extractor": [
+    keywords=["go", "golang", "python", "excel", "xlsx", "form", "active-x", "form controls"],
+    ext_modules=[],
+    py_modules = ["py_excelize.extractor", "py_excelize.utils"],
+    package_data={"py_excelize": [
         "*.so",
         "*_go.py",
         "*.py",

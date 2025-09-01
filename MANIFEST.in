@@ -1,8 +1,8 @@
-include py_excel_form_extractor/*.so
-include py_excel_form_extractor/*.py
-include py_excel_form_extractor/_*.py
-include py_excel_form_extractor/*.h
-include py_excel_form_extractor/*.c
+include py_excelize/*.so
+include py_excelize/*.py
+include py_excelize/_*.py
+include py_excelize/*.h
+include py_excelize/*.c
 include LICENSE
 include README.md
 recursive-include pkg *.go

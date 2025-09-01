@@ -21,7 +21,7 @@ def normalize(name):  # https://peps.python.org/pep-0503/#normalized-names
     return re.sub(r"[-_.]+", "-", name).lower()
 
 
-PACKAGE_PATH = "py_excel_form_extractor"
+PACKAGE_PATH = "py_excelize"
 PACKAGE_NAME = PACKAGE_PATH.split("/")[-1]
 
 if sys.platform == "darwin":
@@ -89,7 +89,7 @@ setuptools.setup(
     url="https://github.com/adhadse/excelFormExtractor",
     author="Anurag Dhadse",
     author_email="hello@adhadse.com",
-    description="Extract excel form content into structured data.",
+    description="Excel reader backed by Go excelize, with form controls support.",
     long_description=readme,
     long_description_content_type="text/markdown",
     license=license,
@@ -107,16 +107,14 @@ setuptools.setup(
         Extension(
             name=PACKAGE_NAME,
             sources=[
-                # PACKAGE_PATH,
-                "./pkg/extractor",
-                "./pkg/utils",
+                "./pkg/pyexcelize",
             ],
-            # include_dirs=["py_excel_form_extractor"],
+            # include_dirs=["py_excelize"],
         )
     ],
-    # py_modules = ["py_excel_form_extractor.extractor", "py_excel_form_extractor.utils"],
+    # py_modules = ["py_excelize"],
     setup_requires=['pybindgen'],
-    package_data={"py_excel_form_extractor": [
+    package_data={"py_excelize": [
         "*.so",
         "*_go.py",
         "*.py",

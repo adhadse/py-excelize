@@ -1,4 +1,4 @@
-module github.com/adhadse/excelFormExtractor
+module github.com/adhadse/pyexcelize
 
 go 1.22
 

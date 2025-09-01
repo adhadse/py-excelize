@@ -23,7 +23,11 @@ go.work.sum
 
 # env file
 .env
-py_excel_form_extractor
+py_excelize
 *.egg-info
 dist
 build
+.idea/
+.venv/
+.eggs/
+gobinary

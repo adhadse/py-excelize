@@ -1,13 +1,11 @@
 [project]
-name = "py-excel-form-extractor"
+name = "py-excelize"
 dynamic = ["version", "keywords"]
 description = "Extract excel form content into structured data"
-authors = [
-    {name = "Anurag Dhadse", email = "hello@adhadse.com"}
-]
+authors = [{ name = "Anurag Dhadse", email = "hello@adhadse.com" }]
 readme = "README.md"
 requires-python = ">=3.8"
-license = {text = "MIT"}
+license = { text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -15,11 +13,6 @@ classifiers = [
 
 
 [build-system]
-requires = [
-    "setuptools>=42",
-    "Cython",
-    "wheel",
-    "pybindgen"
-]
+requires = ["setuptools>=42", "Cython", "wheel", "pybindgen"]
 
 build-backend = "setuptools.build_meta"
