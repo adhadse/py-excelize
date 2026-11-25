@@ -357,7 +357,7 @@ func TestOpenFailures(t *testing.T) {
 		if wb != nil || !isKind(err, pyexcelize.KindFormat) {
 			t.Fatalf("wb=%v err=%v", wb, err)
 		}
-		if !strings.Contains(err.Error(), garbagePath) {
+		if !strings.Contains(err.Error(), fmt.Sprintf("%q", garbagePath)) {
 			t.Fatalf("error should mention path: %v", err)
 		}
 	})

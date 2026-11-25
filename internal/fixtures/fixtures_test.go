@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"sort"
 	"strings"
 	"testing"
@@ -315,8 +316,8 @@ func TestWriteAllErrors(t *testing.T) {
 		}
 	})
 	t.Run("read-only dir", func(t *testing.T) {
-		if os.Geteuid() == 0 {
-			t.Skip("root ignores permissions")
+		if runtime.GOOS == "windows" || os.Geteuid() == 0 {
+			t.Skip("directory permissions are not enforced here")
 		}
 		dir := filepath.Join(base, "ro")
 		if err := os.Mkdir(dir, 0o500); err != nil {
