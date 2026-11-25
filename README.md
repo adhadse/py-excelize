@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/adhadse/py-excelize/actions/workflows/ci.yml/badge.svg)](https://github.com/adhadse/py-excelize/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/py-excelize.svg)](https://pypi.org/project/py-excelize/)
+[![Downloads](https://static.pepy.tech/badge/py-excelize)](https://pepy.tech/project/py-excelize)
 [![Go Reference](https://pkg.go.dev/badge/github.com/adhadse/py-excelize.svg)](https://pkg.go.dev/github.com/adhadse/py-excelize)
 
 Read Excel workbooks from Python, **including legacy form controls** (check boxes, option
