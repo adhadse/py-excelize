@@ -11,7 +11,7 @@ Go library [excelize](https://github.com/xuri/excelize).
 - Typed, Pythonic API: context managers, dataclasses, enums, a real exception hierarchy.
 - Prebuilt wheels for **Linux** (x86_64, aarch64), **macOS** (Intel, Apple Silicon) and
   **Windows** (x64). No compiler needed to install.
-- Works on Python 3.9+ (the wheel is ABI independent).
+- Works on Python 3.10-3.15 (the wheel is ABI independent).
 - Also usable as a plain Go library: see [pkg.go.dev](https://pkg.go.dev/github.com/adhadse/py-excelize).
 
 ## Install
@@ -113,7 +113,7 @@ The Go package is the source of truth; `internal/capi` implements the JSON proto
 
 ## Development
 
-Requirements: Go (see `go.mod`), a C compiler, Python 3.9+.
+Requirements: Go (see `go.mod`), a C compiler, Python 3.10+.
 
 ```bash
 go test -race -cover ./...            # Go tests
@@ -129,7 +129,7 @@ go run ./cmd/genfixtures              # regenerate testdata/*.xlsx
 1. Bump the version in `src/py_excelize/_version.py` **and** `internal/capi/capi.go`.
 2. Update `CHANGELOG.md`, commit, then `git tag vX.Y.Z && git push --tags`.
 3. The *Release* workflow tests, builds wheels for every platform, verifies them on Python
-   3.9-3.13 and publishes to PyPI via [trusted publishing](https://docs.pypi.org/trusted-publishers/).
+   3.10-3.15 and publishes to PyPI via [trusted publishing](https://docs.pypi.org/trusted-publishers/).
 
 ## License
 

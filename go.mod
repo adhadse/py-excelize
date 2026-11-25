@@ -1,6 +1,6 @@
 module github.com/adhadse/py-excelize
 
-go 1.26.0
+go 1.27.3
 
 require github.com/xuri/excelize/v2 v2.11.1
 

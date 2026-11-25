@@ -46,7 +46,7 @@ def test_release_builds_every_platform(needle):
     assert needle in read(".github/workflows/release.yml")
 
 
-@pytest.mark.parametrize("py", ["3.9", "3.10", "3.11", "3.12", "3.13"])
+@pytest.mark.parametrize("py", ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15"])
 def test_release_verifies_every_python(py):
     assert f'"{py}"' in read(".github/workflows/release.yml")
 
@@ -70,7 +70,7 @@ def test_ci_is_reusable_by_release():
 def test_pyproject_metadata():
     text = read("pyproject.toml")
     assert 'name = "py-excelize"' in text
-    assert 'requires-python = ">=3.9"' in text
+    assert 'requires-python = ">=3.10"' in text
     assert "py_excelize._version.__version__" in text
 
 
@@ -88,7 +88,7 @@ def test_cibuildwheel_runs_the_python_tests():
 
 def test_python_classifiers_cover_ci_matrix():
     text = read("pyproject.toml")
-    for v in ("3.9", "3.10", "3.11", "3.12", "3.13"):
+    for v in ("3.10", "3.11", "3.12", "3.13", "3.14", "3.15"):
         assert f"Programming Language :: Python :: {v}" in text
 
 

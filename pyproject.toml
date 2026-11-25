@@ -7,7 +7,7 @@ name = "py-excelize"
 dynamic = ["version"]
 description = "Read Excel workbooks and legacy form controls (check boxes, option buttons, ...) from Python, powered by Go's excelize."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Anurag Dhadse", email = "hello@adhadse.com" }]
 keywords = ["excel", "xlsx", "form controls", "checkbox", "spreadsheet", "excelize", "golang"]
@@ -20,11 +20,12 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Go",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Office/Business :: Financial :: Spreadsheet",
     "Typing :: Typed",
 ]
@@ -64,7 +65,7 @@ show_missing = true
 # The wheel is tagged py3-none-<platform> (the native library is loaded via
 # ctypes), so one interpreter per platform is enough; compatibility with other
 # Python versions is verified separately by the release workflow.
-build = "cp312-*"
+build = "cp314-*"
 skip = "*-musllinux_*"
 test-requires = ["pytest"]
 test-command = "pytest {project}/tests/python -q"
@@ -75,7 +76,7 @@ manylinux-x86_64-image = "manylinux_2_28"
 manylinux-aarch64-image = "manylinux_2_28"
 before-all = [
     "ARCH=$(uname -m); case $ARCH in x86_64) GOARCH=amd64;; aarch64) GOARCH=arm64;; esac",
-    "curl -fsSL https://go.dev/dl/go1.26.11.linux-$GOARCH.tar.gz | tar -C /usr/local -xz",
+    "curl -fsSL https://go.dev/dl/go1.27.4.linux-$GOARCH.tar.gz | tar -C /usr/local -xz",
 ]
 environment = { PATH = "$PATH:/usr/local/go/bin", GOFLAGS = "-buildvcs=false" }
 
