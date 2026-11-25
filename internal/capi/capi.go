@@ -12,7 +12,7 @@ import (
 )
 
 // Version of the wire protocol / library.
-const Version = "0.1.0"
+const Version = "0.4.0"
 
 // Error is the error payload of a failed response.
 type Error struct {
