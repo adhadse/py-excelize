@@ -1,8 +1,6 @@
-include py_excel_form_extractor/*.so
-include py_excel_form_extractor/*.py
-include py_excel_form_extractor/_*.py
-include py_excel_form_extractor/*.h
-include py_excel_form_extractor/*.c
-include LICENSE
-include README.md
-recursive-include pkg *.go
+include LICENSE README.md go.mod go.sum
+recursive-include cmd *.go
+recursive-include internal *.go
+include *.go
+recursive-include src/py_excelize py.typed
+global-exclude *.so *.dylib *.dll *.pyc

@@ -1,25 +1,87 @@
-[project]
-name = "py-excel-form-extractor"
-dynamic = ["version", "keywords"]
-description = "Extract excel form content into structured data"
-authors = [
-    {name = "Anurag Dhadse", email = "hello@adhadse.com"}
-]
-readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-]
-
-
 [build-system]
-requires = [
-    "setuptools>=42",
-    "Cython",
-    "wheel",
-    "pybindgen"
+requires = ["setuptools>=70.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "py-excelize"
+dynamic = ["version"]
+description = "Read Excel workbooks and legacy form controls (check boxes, option buttons, ...) from Python, powered by Go's excelize."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Anurag Dhadse", email = "hello@adhadse.com" }]
+keywords = ["excel", "xlsx", "form controls", "checkbox", "spreadsheet", "excelize", "golang"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Go",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Office/Business :: Financial :: Spreadsheet",
+    "Typing :: Typed",
 ]
 
-build-backend = "setuptools.build_meta"
+[project.urls]
+Homepage = "https://github.com/adhadse/py-excelize"
+Documentation = "https://github.com/adhadse/py-excelize#readme"
+"Go reference" = "https://pkg.go.dev/github.com/adhadse/py-excelize"
+Issues = "https://github.com/adhadse/py-excelize/issues"
+
+[project.optional-dependencies]
+test = ["pytest>=7", "pytest-cov>=4"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["py_excelize"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = { attr = "py_excelize._version.__version__" }
+
+[tool.setuptools.package-data]
+py_excelize = ["py.typed", "*.so", "*.dylib", "*.dll"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/python"]
+addopts = "-ra --strict-markers"
+
+[tool.coverage.run]
+source = ["py_excelize"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.cibuildwheel]
+# The wheel is tagged py3-none-<platform> (the native library is loaded via
+# ctypes), so one interpreter per platform is enough; compatibility with other
+# Python versions is verified separately by the release workflow.
+build = "cp314-*"
+skip = "*-musllinux_*"
+test-requires = ["pytest"]
+test-command = "pytest {project}/tests/python -q"
+build-verbosity = 1
+
+[tool.cibuildwheel.linux]
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
+before-all = [
+    "ARCH=$(uname -m); case $ARCH in x86_64) GOARCH=amd64;; aarch64) GOARCH=arm64;; esac",
+    "curl -fsSL https://go.dev/dl/go1.27.4.linux-$GOARCH.tar.gz | tar -C /usr/local -xz",
+]
+environment = { PATH = "$PATH:/usr/local/go/bin", GOFLAGS = "-buildvcs=false" }
+
+[tool.cibuildwheel.macos]
+environment = { MACOSX_DEPLOYMENT_TARGET = "11.0", CGO_CFLAGS = "-mmacosx-version-min=11.0", CGO_LDFLAGS = "-mmacosx-version-min=11.0" }
+
+[tool.cibuildwheel.windows]
+environment = { CGO_ENABLED = "1" }
