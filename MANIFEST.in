@@ -1,8 +1,6 @@
-include py_excelize/*.so
-include py_excelize/*.py
-include py_excelize/_*.py
-include py_excelize/*.h
-include py_excelize/*.c
-include LICENSE
-include README.md
-recursive-include pkg *.go
+include LICENSE README.md go.mod go.sum
+recursive-include cmd *.go
+recursive-include internal *.go
+include *.go
+recursive-include src/py_excelize py.typed
+global-exclude *.so *.dylib *.dll *.pyc

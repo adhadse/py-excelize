@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag must match package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          pkg=$(python3 -c "exec(open('src/py_excelize/_version.py').read()); print(__version__)")
+          go=$(sed -n 's/^const Version = "\(.*\)"/\1/p' internal/capi/capi.go)
+          tag="${GITHUB_REF_NAME#v}"
+          echo "tag=$tag python=$pkg go=$go"
+          test "$tag" = "$pkg" && test "$pkg" = "$go"
+
+  test:
+    needs: check-version
+    uses: ./.github/workflows/ci.yml
+
+  wheels:
+    name: Wheel ${{ matrix.name }}
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: linux-x86_64, os: ubuntu-latest }
+          - { name: linux-aarch64, os: ubuntu-24.04-arm }
+          - { name: macos-arm64, os: macos-14 }
+          - { name: macos-x86_64, os: macos-15-intel }
+          - { name: windows-amd64, os: windows-latest }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: pypa/cibuildwheel@v2.23.3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.name }}
+          path: wheelhouse/*.whl
+          if-no-files-found: error
+
+  sdist:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install build
+      - run: python -m build --sdist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+
+  verify:
+    name: Install wheel on ${{ matrix.os }} / py${{ matrix.python }}
+    needs: wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-*
+          path: wheels
+          merge-multiple: true
+      - name: Install the matching wheel and run the tests
+        shell: bash
+        run: |
+          python -m pip install pytest
+          python -m pip install --no-index --find-links wheels py-excelize
+          # src/ layout: the installed wheel (not the checkout) is what gets imported
+          python -m pytest tests/python -q -p no:cacheprovider
+
+  publish:
+    name: Publish to PyPI
+    needs: [wheels, sdist, verify]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/py-excelize
+    permissions:
+      id-token: write # PyPI trusted publishing (OIDC)
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: ls -l dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+      - name: Prime pkg.go.dev
+        run: |
+          curl -fsS "https://proxy.golang.org/github.com/adhadse/py-excelize/@v/${GITHUB_REF_NAME}.info" || true
